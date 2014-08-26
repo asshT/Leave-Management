@@ -1,0 +1,34 @@
+#calendar{
+  margin:0px auto;
+  padding:0px;
+  width: 650px;
+  font-family:Helvetica, "Times New Roman", Times, serif;
+  border-collapse: collapse;
+  
+
+}
+
+
+#calendar td, #calendar th {
+    font-size: 25px;
+    border: 1px solid #030303;
+    padding: 3px 7px 2px 7px;
+
+}
+
+ #calendar th {
+ background-color:#363636;
+ color:#FFFFFF;
+}
+#calendar td {
+height:45px;
+
+}
+#calendar a{
+
+text-decoration:none;
+}
+
+#calendar a:hover{
+color:#030303;
+}
