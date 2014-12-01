@@ -1,0 +1,9 @@
+--------------------**************NOTE***************-----------------------
+
+BEFORE RUNNING ANYTHING...
+
+SET GLOBAL event_scheduler = 1;
+
+
+ENTER THIS COMMAND IN COMMAND LINE(BLACK WALA) OF MYSQL
+

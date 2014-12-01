@@ -1,0 +1,22 @@
+#leaves {
+    font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+    width: 70%;
+    border-collapse: collapse;
+}
+
+#leaves td, #leaves th {
+    font-size: 1em;
+    border: 1px solid #030303;
+    padding: 3px 7px 2px 7px;
+
+}
+
+#leaves th {
+    font-size: 1.1em;
+    text-align: left;
+    padding-top: 5px;
+    padding-bottom: 4px;
+    background-color: #FF8040;
+	color:#FFFFFF;
+   
+}

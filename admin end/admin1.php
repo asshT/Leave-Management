@@ -15,8 +15,6 @@
 }
 
 </style>
-
-<link rel="stylesheet" type="text/css" href="admin_tabs.css">
 <link rel="stylesheet" type="text/css" href="table.css">
 <link rel="stylesheet" type="text/css" href="top.css">
 
@@ -35,14 +33,7 @@ $conn = mysqli_connect("localhost","root","","leavedb") or die("error");
 
 <div class="head">
 <br />
-<div class="list">
-<ul><center>
-<li><a class="list" href="admin1.php">Manage leave types</a></li>
-<li><a class="list" href="calendar3.php">Approve/Deny leaves</a></li>
-<li><a class="list" href="newleavedate.php">Manage holidays</a></li>
-<li><a class="list" href="logout.php">Leave Status</a></li>
-<li><a class="list" href="logout.php">Logout</a></li></center></ul>
-</div>
+<?php include('admin_navbar.php');?>
 <p style="clear:both"></p>
 <br />
 

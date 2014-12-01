@@ -1,0 +1,17 @@
+a.top{
+position:fixed;
+right:0px;
+top:45%;
+background: url(images/up.png) no-repeat;
+background-size: 70px 75px;
+padding-bottom:10px;
+padding-top:50px;
+padding-left:20px;
+padding-right:20px;}
+a.top:hover{
+background: url(images/upd.png) no-repeat;
+background-size: 70px 75px;
+padding-bottom:10px;
+padding-top:50px;
+padding-left:20px;
+padding-right:20px;}

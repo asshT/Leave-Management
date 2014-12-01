@@ -24,23 +24,16 @@
 
 <div class="head">
 <br />
-<div class="list">
-<ul><center>
-<li><a class="list" href="admin1.php">Manage leave types</a></li>
-<li><a class="list" href="admin2.php">Approve/Deny leaves</a></li>
-<li><a class="list" href="newleavedate.php">Manage holidays</a></li>
-<li><a class="list" href="logout.php">Leave Status</a></li>
-<li><a class="list" href="logout.php">Logout</a></li></center></ul>
-</div>
+<?php include('admin_navbar.php'); ?>
 <p style="clear:both"></p>
 <br />
 
 
 
 <?php
-mysql_connect("localhost", "root", "") or die (mysql_error());
+$conn=mysqli_connect("localhost", "root","","leavedb") or die (mysql_error());
 //echo "Connected to Mysql<br/><hr/>";
-mysql_select_db("leavedb") or die (mysql_error());
+//mysql_select_db("leavedb") or die (mysql_error());
 //echo"Connected to Database<br/><hr>";
 ?>
 
@@ -88,7 +81,6 @@ vertical-align:text-top;
 vertical-align:text-top;
 }
 </style>
-<link rel="stylesheet" type="text/css" href="admin_tabs.css">
 <link rel="stylesheet" type="text/css" href="table.css">
 
 </head>
@@ -114,7 +106,8 @@ $monthName = date("F", $currentTimeStamp);
 $numDays = date("t", $currentTimeStamp);
 $counter = 0;
 ?>
-<table align="right" style="border-collapse: collapse;border: 1px solid #030303"><tr><td style="background-color:#00ff00; width:40px"></td><td>Today</td></tr>
+<table align="right" style="border-collapse: collapse;border: 1px solid #030303">
+<tr><td style="background-color:#00ff00; width:40px"></td><td>Today</td></tr>
 <tr><td style="background-color:#FFFF00"></td><td>Leave request day</td></tr></table>
 <center>
 <table id="calendar">
@@ -141,10 +134,10 @@ for($i = 1; $i < $numDays+1; $i++, $counter++){
 $timeStamp = strtotime("$year-$month-$i"); 
 $d=$year."-".$month."-".$i;
 $sqlCount = "select * from leave_application where date_from='$d'";
-$result=mysql_query($sqlCount);
-while ($events = mysql_fetch_array($result))
+$result=mysqli_query($conn,$sqlCount);
+while ($events = mysqli_fetch_array($result))
 {$a=" ".$events['emp_id'].", ";
- echo $a;
+ //echo $a;
 }
 if($i == 1) {
 $firstDay = date("w", $timeStamp);
@@ -153,7 +146,7 @@ echo "<td>&nbsp;</td>";
 }
 }
 if($counter % 7 == 0) {
-echo"<td width='150px' height='100'></td></tr><tr style=\"background-color:#e8e8e8\">";
+echo"</tr><tr style=\"background-color:#e8e8e8\">";
 }
 $monthstring = $month;
 $monthlength = strlen($monthstring);
@@ -173,19 +166,19 @@ if ($todaysDate == $dateToCompare){
 echo "class ='today'";
 } else{
 $sqlCount = "select * from leave_application where date_from='".$dateToCompare."'";
-$result=mysql_query($sqlCount);
-$noOfEvent = mysql_num_rows(mysql_query($sqlCount));
+$result=mysqli_query($conn,$sqlCount);
+$noOfEvent = mysqli_num_rows($result);
 $f=0;
 if($noOfEvent >= 1){
 
 echo "class='event'";
 //$b=" "." Emp_ID : ".$a." ";
 }
-while($events=mysql_fetch_array($result))
+while($events=mysqli_fetch_array($result))
 {$e[$f]=$events['emp_id'];
- $sql="select * from employee_personal,leave_application where employee_personal.emp_id=".$events['emp_id']."";
- $res=mysql_query($sql);
- $n=mysql_fetch_row($res);
+ $sql="select * from employee_personal,leave_application where employee_personal.emp_id='".$events['emp_id']."'";
+ $res=mysqli_query($conn,$sql);
+ $n=mysqli_fetch_row($res);
  echo $n['1'];
  $f=$f+1;
  echo "><font size=1> Emp ID : </font>";
@@ -214,9 +207,9 @@ echo "</tr>";
 
 <center><table id="leaves">
 <tr>
-<th>SNo</th>
-<th>Emp_ID</th>
-<th>Leave_ID</th>
+<th>S. No.</th>
+<th>Employee ID</th>
+<th>Leave ID</th>
 <th>Status</th>
 <th>Reason</th>
 <th>Number of Days</th>
@@ -232,29 +225,39 @@ $year=$_GET['year'];
 $d=$year.'-'.$monthstring. '-' . $daystring ;
 $d="".$d."";
 $sqlEvent = "select * FROM leave_application where date_from <= '$d' and date_to >='$d'";
-$resultEvents = mysql_query($sqlEvent);
+$resultEvents = mysqli_query($conn,$sqlEvent);
 if(!$resultEvents)
-{echo mysql_error();
+{echo "Error";
 }
-while ($events = mysql_fetch_array($resultEvents)){
+while ($events = mysqli_fetch_array($resultEvents)){
 $sno=$events['sno'];
 echo "<tr>";
-echo "<td>".$events['sno']."</td>";
+echo "<td>".$events['sno']."</td>"; 
 echo "<td>".$events['emp_id']."</td> ";
+
 echo "<td>".$events['leave_id']."</td> ";
-echo "<td>".$events['status']."</td> ";
+
+if($events['status'] == 'p')
+	echo " <td> "."Pending"."</td> ";
+	else if($events['status'] == 'a')
+	echo  "<td> "."Approved"."</td>";
+	else " <td> "."Denied"."</td> ";
+
 echo "<td>".$events['reason']." </td>";
 echo "<td>".$events['nod']."</td> ";
 echo "<td>".$events['date_from']."</td> ";
 echo "<td>".$events['date_to']."</td> ";
 echo"</td><td>";
+if($events['status'] == 'p')
+{
 echo '<a href="approve.php?sno='.$sno.'"><img style="border:0; padding-left:40px;padding-right:20px;" src="images/approve.png" alt="Approve" width="25" height="25" ></a>';
  echo '<a href="deny.php?sno='.$sno.'"><img style="border:0;" src="images/deny.png" alt="Deny" width="23" height="23"></a>';
-echo "</tr>";
+echo "</td></tr>";
+}
 }
 }
 ?>
-</table>
+</table><br /><br /></center></div>
 </body>
 </html>
 <?php 
